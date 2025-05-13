@@ -67,6 +67,7 @@ from synapse.util.threepids import (
     check_3pid_allowed,
     validate_email,
 )
+from synapse.handlers.phone_verification import PhoneSMSSender
 
 from ._base import client_patterns, interactive_auth_handler
 
@@ -950,6 +951,325 @@ class RegisterAppServiceOnlyRestServlet(RestServlet):
         return 200, {"user_id": user_id}
 
 
+class PhoneRegistrationTokenServlet(RestServlet):
+    """Handles phone verification for both registration and login.
+    
+    This is similar to WhatsApp's onboarding flow where:
+    1. User enters phone number
+    2. Server sends OTP
+    3. User verifies OTP
+    4. If new user: create profile; If existing user: log in
+    """
+    PATTERNS = client_patterns("/register/phone/requestToken$")
+
+    def __init__(self, hs: "HomeServer"):
+        super().__init__()
+        self.hs = hs
+        self.identity_handler = hs.get_identity_handler()
+        self.store = hs.get_datastores().main
+        self.config = hs.config
+        self.auth_handler = hs.get_auth_handler()
+        self.registration_handler = hs.get_registration_handler()
+        self.clock = hs.get_clock()
+        self.sms_sender = PhoneSMSSender(hs)
+
+    async def on_POST(self, request: SynapseRequest) -> Tuple[int, JsonDict]:
+        """Handle phone number submission and send OTP (mocked for now)
+        
+        Request body should contain:
+        {
+            "phone_number": "+2348166406459",
+            "country": "NG" (optional, can be inferred from phone number),
+            "client_secret": "abcdef",
+            "send_attempt": 1
+        }
+        """
+        body = parse_json_object_from_request(request)
+
+        assert_params_in_dict(body, ["client_secret", "phone_number", "send_attempt"])
+        client_secret = body["client_secret"]
+        assert_valid_client_secret(client_secret)
+        phone_number = body["phone_number"]
+        country = body.get("country", "")  # Country can be optional and inferred from phone number
+        send_attempt = body["send_attempt"]
+
+        # Convert to MSISDN format (international format)
+        msisdn = phone_number_to_msisdn(country, phone_number)
+
+        if not await check_3pid_allowed(self.hs, "msisdn", msisdn, registration=True):
+            raise SynapseError(
+                403,
+                "Phone numbers are not authorized to register on this server",
+                Codes.THREEPID_DENIED,
+            )
+
+        # Check if phone number is already in use - but don't error, just track this
+        existing_user_id = await self.store.get_user_id_by_threepid("msisdn", msisdn)
+        
+        # Generate session ID to track this registration attempt
+        session = await self.store.create_ui_auth_session(
+            clientdict=body, 
+            uri="/register/phone/requestToken", 
+            method="POST",
+            description="Phone number verification for registration"
+        )
+        session_id = session.session_id
+        
+        # Store the phone number in the session for later use
+        await self.auth_handler.set_session_data(
+            session_id,
+            "phone_registration_msisdn",
+            msisdn
+        )
+        
+        # Store whether this is a login (existing user) or registration (new user)
+        await self.auth_handler.set_session_data(
+            session_id,
+            "phone_existing_user_id",
+            existing_user_id  # Will be None for registration, user_id for login
+        )
+
+        # Generate a verification code
+        verification_code = await self.sms_sender.generate_verification_code()
+        
+        # In a real implementation, we would store a hashed version of the code
+        # Here we're just storing it directly for simplicity
+        await self.auth_handler.set_session_data(
+            session_id,
+            "phone_registration_otp",
+            verification_code
+        )
+        
+        # Set expiry time for OTP (10 minutes)
+        expiry_time = self.clock.time_msec() + (10 * 60 * 1000)
+        await self.auth_handler.set_session_data(
+            session_id,
+            "phone_registration_otp_expiry",
+            expiry_time
+        )
+
+        # Send the verification code
+        sent = await self.sms_sender.send_verification_code(msisdn, verification_code)
+        
+        if not sent:
+            raise SynapseError(
+                500, "Failed to send verification code", Codes.SERVER_ERROR
+            )
+
+        logger.info(f"Phone verification initiated for {msisdn}, session: {session_id}, {'login' if existing_user_id else 'registration'}")
+        
+        # Return the session ID to the client
+        return 200, {
+            "sid": session_id,
+            # "is_login": existing_user_id is not None,  # Tell client if this is login or registration
+            # For development only - remove in production
+            # "mock_otp": verification_code
+        }
+
+
+class PhoneRegistrationVerifyServlet(RestServlet):
+    """Handles OTP verification for phone-based registration and login."""
+    PATTERNS = client_patterns("/register/phone/verify$")
+
+    def __init__(self, hs: "HomeServer"):
+        super().__init__()
+        self.hs = hs
+        self.auth_handler = hs.get_auth_handler()
+        self.registration_handler = hs.get_registration_handler()
+        self.store = hs.get_datastores().main
+        self.clock = hs.get_clock()
+
+    async def on_POST(self, request: SynapseRequest) -> Tuple[int, JsonDict]:
+        """Verify the OTP code and complete registration or login if successful.
+        
+        Request body should contain:
+        {
+            "sid": "session_id_from_requestToken",
+            "otp": "123456",
+            "username": "desired_username",  # Optional, only used for registration
+            "display_name": "Display Name"   # Optional, only used for registration
+        }
+        """
+        body = parse_json_object_from_request(request)
+        
+        assert_params_in_dict(body, ["sid", "otp"])
+        session_id = body["sid"]
+        provided_otp = body["otp"]
+        
+        # Get stored data from session
+        stored_otp = await self.auth_handler.get_session_data(
+            session_id, "phone_registration_otp", None
+        )
+        
+        if stored_otp is None:
+            raise SynapseError(400, "Invalid session", Codes.INVALID_PARAM)
+        
+        # Check OTP expiry
+        expiry_time = await self.auth_handler.get_session_data(
+            session_id, "phone_registration_otp_expiry", 0
+        )
+        
+        if self.clock.time_msec() > expiry_time:
+            raise SynapseError(400, "OTP has expired", Codes.INVALID_PARAM)
+        
+        # Verify OTP
+        if provided_otp != stored_otp:
+            raise SynapseError(400, "Invalid OTP code", Codes.INVALID_PARAM)
+        
+        # Get the phone number from the session
+        msisdn = await self.auth_handler.get_session_data(
+            session_id, "phone_registration_msisdn", None
+        )
+        
+        if msisdn is None:
+            raise SynapseError(400, "Invalid session data", Codes.INVALID_PARAM)
+
+        # Get the existing user_id if this is a login
+        existing_user_id = await self.auth_handler.get_session_data(
+            session_id, "phone_existing_user_id", None
+        )
+        
+        # If we have an existing user, this is a login flow
+        if existing_user_id:
+            logger.info(f"Phone verification successful for login: {msisdn}, user: {existing_user_id}")
+            
+            # Create a device and access token for the existing user
+            device_id = body.get("device_id")
+            initial_display_name = body.get("initial_device_display_name", "Mobile Device")
+            (
+                device_id,
+                access_token,
+                valid_until_ms,
+                refresh_token,
+            ) = await self.registration_handler.register_device(
+                existing_user_id, device_id, initial_display_name, is_guest=False
+            )
+            
+            # Return user credentials
+            result = {
+                "user_id": existing_user_id,
+                "access_token": access_token,
+                "device_id": device_id,
+                "home_server": self.hs.hostname,
+            }
+            
+            if valid_until_ms is not None:
+                expires_in_ms = valid_until_ms - self.clock.time_msec()
+                result["expires_in_ms"] = expires_in_ms
+                
+            if refresh_token is not None:
+                result["refresh_token"] = refresh_token
+                
+            # Clear the session data
+            await self._clear_session_data(session_id)
+                
+            return 200, result
+            
+        # Otherwise, this is a registration flow - continue with user creation
+        desired_username = body.get("username")
+        if desired_username is not None:
+            # Convert to lowercase as per existing registration logic
+            desired_username = desired_username.lower()
+            
+            # Check username validity
+            try:
+                await self.registration_handler.check_username(
+                    desired_username,
+                    guest_access_token=None,
+                    assigned_user_id=None,
+                    inhibit_user_in_use_error=False,
+                )
+            except SynapseError as e:
+                # If username is taken or invalid, return error
+                return 400, {"error": str(e)}
+        else:
+            # Generate username from last part of phone number
+            # For example, +2348166406459 becomes "user_6406459"
+            base_username = "user_" + msisdn[-7:]
+            desired_username = base_username
+            
+            # Try to find a username that's not taken
+            username_suffix = 0
+            while True:
+                try:
+                    await self.registration_handler.check_username(
+                        desired_username,
+                        guest_access_token=None,
+                        assigned_user_id=None,
+                        inhibit_user_in_use_error=False,
+                    )
+                    # If no exception, username is available
+                    break
+                except SynapseError:
+                    # Try next suffix
+                    username_suffix += 1
+                    desired_username = f"{base_username}_{username_suffix}"
+        
+        # Get display name if provided
+        display_name = body.get("display_name")
+        
+        # Register the user with the phone number as a threepid
+        threepid = {
+            "medium": "msisdn",
+            "address": msisdn,
+            "validated_at": self.clock.time_msec(),
+        }
+        
+        # Generate a random password for the user
+        # In a phone-only flow, the user may never use the password
+        random_password = random_string(24)
+        password_hash = await self.auth_handler.hash(random_password)
+        
+        # Register the user
+        user_id = await self.registration_handler.register_user(
+            localpart=desired_username,
+            password_hash=password_hash,
+            threepid=threepid,
+            default_display_name=display_name,
+            address=request.getClientAddress().host,
+        )
+        
+        # Create a device and access token
+        device_id = body.get("device_id")
+        initial_display_name = body.get("initial_device_display_name", "Mobile Device")
+        (
+            device_id,
+            access_token,
+            valid_until_ms,
+            refresh_token,
+        ) = await self.registration_handler.register_device(
+            user_id, device_id, initial_display_name, is_guest=False
+        )
+        
+        # Clear the session data
+        await self._clear_session_data(session_id)
+        
+        # Return user credentials
+        result = {
+            "user_id": user_id,
+            "access_token": access_token,
+            "device_id": device_id,
+            "home_server": self.hs.hostname,
+            "threepid": threepid,
+        }
+        
+        if valid_until_ms is not None:
+            expires_in_ms = valid_until_ms - self.clock.time_msec()
+            result["expires_in_ms"] = expires_in_ms
+            
+        if refresh_token is not None:
+            result["refresh_token"] = refresh_token
+            
+        return 200, result
+    
+    async def _clear_session_data(self, session_id: str) -> None:
+        """Helper method to clear session data once verification is complete."""
+        await self.auth_handler.set_session_data(session_id, "phone_registration_otp", None)
+        await self.auth_handler.set_session_data(session_id, "phone_registration_msisdn", None)
+        await self.auth_handler.set_session_data(session_id, "phone_registration_otp_expiry", None)
+        await self.auth_handler.set_session_data(session_id, "phone_existing_user_id", None)
+
+
 def _calculate_registration_flows(
     config: HomeServerConfig, auth_handler: AuthHandler
 ) -> List[List[str]]:
@@ -1044,6 +1364,9 @@ def register_servlets(hs: "HomeServer", http_server: HttpServer) -> None:
         EmailRegisterRequestTokenRestServlet(hs).register(http_server)
         MsisdnRegisterRequestTokenRestServlet(hs).register(http_server)
         RegistrationSubmitTokenServlet(hs).register(http_server)
+        # Register our new phone-based registration endpoints
+        PhoneRegistrationTokenServlet(hs).register(http_server)
+        PhoneRegistrationVerifyServlet(hs).register(http_server)
     UsernameAvailabilityRestServlet(hs).register(http_server)
     RegistrationTokenValidityRestServlet(hs).register(http_server)
     RegisterRestServlet(hs).register(http_server)
