@@ -12,10 +12,13 @@ services:
       - ../homeserver.yaml:/data/homeserver.yaml:ro
       # Mount the config directory (writable)
       - ../config:/data/config
+      # Create symlink for config path resolution
+      - ../config:/config
     ports:
       - "8008:8008"
     environment:
       - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+    working_dir: /data
     healthcheck:
       test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
       interval: 15s
