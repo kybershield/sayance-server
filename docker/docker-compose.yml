@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  synapse:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: always
+    volumes:
+      - synapse-data:/data
+      # Mount your existing homeserver.yaml - adjust path as needed
+      - ../homeserver.yaml:/data/homeserver.yaml:ro
+      # Mount the config directory (writable)
+      - ../config:/data/config
+      # Create symlink for config path resolution
+      - ../config:/config
+    ports:
+      - "8008:8008"
+    environment:
+      - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+    working_dir: /data
+    healthcheck:
+      test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  synapse-data: 

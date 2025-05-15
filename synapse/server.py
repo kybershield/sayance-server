@@ -972,3 +972,8 @@ class HomeServer(metaclass=abc.ABCMeta):
     @cache_in_self
     def get_delayed_events_handler(self) -> DelayedEventsHandler:
         return DelayedEventsHandler(self)
+
+    @cache_in_self
+    def get_phone_sms_sender(self) -> "PhoneSMSSender":
+        from synapse.handlers.phone_verification import PhoneSMSSender
+        return PhoneSMSSender(self)

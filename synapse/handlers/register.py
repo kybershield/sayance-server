@@ -381,6 +381,8 @@ class RegistrationHandler:
 
         # Bind any specified emails to this account
         current_time = self.hs.get_clock().time_msec()
+        if threepid and threepid["medium"] == "msisdn":
+            await self._register_msisdn_threepid(user_id, threepid)
         for email in bind_emails:
             # generate threepid dict
             threepid_dict = {
