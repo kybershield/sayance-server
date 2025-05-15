@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  synapse:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: always
+    volumes:
+      - synapse-data:/data
+      - ../homeserver.yaml:/data/homeserver.yaml:ro
+      - ../config:/data/config
+      - ../config:/config
+      - synapse-keys:/data/keys
+    ports:
+      - "8008:8008"
+    environment:
+      - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+    working_dir: /data
+    entrypoint: /bin/sh
+    command: -c "mkdir -p /data/keys && ln -sf /data/keys/sayance.signing.key /data/sayance.signing.key && python -m synapse.app.homeserver --config-path /data/homeserver.yaml"
+    healthcheck:
+      test: ["CMD", "curl", "-fSs", "http://localhost:8008/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: sayance_user
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-init.sh:/docker-entrypoint-initdb.d/init-db.sh
+    ports:
+      - "5432:5432"
+    command: >
+      postgres
+      -c 'max_connections=100'
+      -c 'shared_buffers=256MB'
+      -c 'log_statement=all'
+      -c 'client_min_messages=notice'
+      -c 'lc_messages=C'
+      -c 'lc_monetary=C'
+      -c 'lc_numeric=C'
+      -c 'lc_time=C'
+      -c 'default_text_search_config=pg_catalog.english'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sayance_user -d sayance"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  synapse-data:
+  synapse-keys:
+  postgres-data: 

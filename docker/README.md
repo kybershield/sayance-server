@@ -1,3 +1,54 @@
+# Docker Environment Setup
+
+This directory contains Docker configuration files for running Sayance server.
+
+## Standard Docker Setup
+
+Use `docker-compose.yml` for the standard setup:
+
+```bash
+cd docker
+docker-compose up -d
+```
+
+## Local Development with PostgreSQL
+
+For local development with a PostgreSQL database within Docker:
+
+```bash
+cd docker
+chmod +x postgres-init.sh  # Make the initialization script executable
+docker-compose -f docker-compose.local.yml up -d
+```
+
+This setup includes:
+- Synapse Matrix server
+- PostgreSQL database with proper collation settings (LC_COLLATE='C', LC_CTYPE='C')
+
+### Configuration Notes
+
+The `homeserver.yaml` file is configured to connect to the Docker PostgreSQL instance by default.
+
+If you want to use a local PostgreSQL installation instead of Docker:
+1. Stop the Docker containers: `docker-compose -f docker-compose.local.yml down`
+2. Edit `homeserver.yaml`:
+   - Comment out the Docker database configuration section
+   - Uncomment the local database configuration section
+3. Set up your local PostgreSQL following instructions in `DATABASE_SETUP.md`
+
+### Data Persistence
+
+All data is stored in Docker volumes:
+- `synapse-data`: Synapse configuration and data
+- `synapse-keys`: Cryptographic keys for Synapse
+- `postgres-data`: PostgreSQL database files
+
+To completely reset the environment (including all data):
+
+```bash
+docker-compose -f docker-compose.local.yml down -v
+```
+
 # Synapse Docker
 
 This Docker image will run Synapse as a single process. By default it uses a
