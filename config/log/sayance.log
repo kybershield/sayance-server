@@ -1012,3 +1012,425 @@
 2025-05-13 11:45:50,697 - twisted - 279 - INFO - sentinel - (TCP Port 8008 Closed)
 2025-05-13 11:45:50,697 - twisted - 279 - INFO - sentinel - (TCP Port 8008 Closed)
 2025-05-13 11:45:50,706 - twisted - 279 - INFO - sentinel - Main loop terminated.
+2025-05-15 01:43:41,633 - root - 352 - WARNING - main - ***** STARTING SERVER *****
+2025-05-15 01:43:41,634 - root - 353 - WARNING - main - Server /Users/victorwhyte/dev/orgs/kybershield/sayance-server/synapse/app/homeserver.py version 1.129.0 (b=feat/phone-auth,2a59566c2)
+2025-05-15 01:43:41,634 - root - 358 - WARNING - main - Copyright (c) 2023 New Vector, Inc
+2025-05-15 01:43:41,634 - root - 359 - WARNING - main - Licensed under the AGPL 3.0 license. Website: https://github.com/element-hq/synapse
+2025-05-15 01:43:41,634 - root - 362 - INFO - main - Server hostname: sayance.org
+2025-05-15 01:43:41,634 - root - 363 - INFO - main - Public Base URL: https://sayance.org/
+2025-05-15 01:43:41,634 - root - 364 - INFO - main - Instance name: master
+2025-05-15 01:43:41,634 - root - 365 - INFO - main - Twisted reactor: SelectReactor
+2025-05-15 01:43:41,634 - synapse.app.homeserver - 373 - INFO - main - Setting up server
+2025-05-15 01:43:41,634 - synapse.server - 357 - INFO - main - Setting up.
+2025-05-15 01:43:41,815 - synapse.storage.databases - 77 - INFO - main - [database config 'master']: Checking database server
+2025-05-15 01:43:41,826 - synapse.storage.databases - 80 - INFO - main - [database config 'master']: Preparing for databases ['main', 'state']
+2025-05-15 01:43:41,826 - synapse.storage.prepare_database - 135 - INFO - main - ['main', 'state']: Checking existing schema version
+2025-05-15 01:43:41,835 - synapse.storage.prepare_database - 139 - INFO - main - ['main', 'state']: Existing schema is 92 (+3 deltas)
+2025-05-15 01:43:41,835 - synapse.storage.databases.main - 395 - INFO - main - Checking database for consistency with configuration...
+2025-05-15 01:43:41,838 - synapse.storage.prepare_database - 433 - INFO - main - Applying schema deltas for v92
+2025-05-15 01:43:41,841 - synapse.storage.prepare_database - 568 - INFO - main - Schema now up to date
+2025-05-15 01:43:41,848 - synapse.storage.databases - 95 - INFO - main - [database config 'master']: Starting 'main' database
+2025-05-15 01:43:42,009 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for push_rules(id): 1
+2025-05-15 01:43:42,010 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for push_rules_enable(id): 1
+2025-05-15 01:43:42,028 - synapse.storage.databases.main.event_push_actions - 1242 - INFO - main - Searching for stream ordering 1 month ago
+2025-05-15 01:43:42,029 - synapse.storage.databases.main.event_push_actions - 1246 - INFO - main - Found stream ordering 1 month ago: it's 0
+2025-05-15 01:43:42,029 - synapse.storage.databases.main.event_push_actions - 1249 - INFO - main - Searching for stream ordering 1 day ago
+2025-05-15 01:43:42,029 - synapse.storage.databases.main.event_push_actions - 1253 - INFO - main - Found stream ordering 1 day ago: it's 0
+2025-05-15 01:43:42,103 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for access_tokens(id): 3
+2025-05-15 01:43:42,104 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for refresh_tokens(id): 1
+2025-05-15 01:43:42,108 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for event_reports(id): 1
+2025-05-15 01:43:42,109 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for room_reports(id): 1
+2025-05-15 01:43:42,130 - synapse.storage.databases - 112 - INFO - main - [database config 'master']: Starting 'state' database
+2025-05-15 01:43:42,132 - synapse.storage.databases - 128 - INFO - main - [database config 'master']: prepared
+2025-05-15 01:43:42,132 - synapse.server - 360 - INFO - main - Finished setting up.
+2025-05-15 01:43:42,173 - synapse.push.pusher - 45 - INFO - main - email enable notifs: False
+2025-05-15 01:43:42,177 - synapse.federation.federation_server - 1408 - INFO - main - Registering federation EDU handler for 'm.device_list_update'
+2025-05-15 01:43:42,177 - synapse.federation.federation_server - 1428 - INFO - main - Registering federation query handler for 'profile'
+2025-05-15 01:43:42,178 - synapse.federation.federation_server - 1408 - INFO - main - Registering federation EDU handler for 'm.presence'
+2025-05-15 01:43:42,178 - synapse.federation.federation_server - 1408 - INFO - main - Registering federation EDU handler for 'm.typing'
+2025-05-15 01:43:42,178 - synapse.federation.federation_server - 1428 - INFO - main - Registering federation query handler for 'directory'
+2025-05-15 01:43:42,179 - synapse.federation.federation_server - 1408 - INFO - main - Registering federation EDU handler for 'm.signing_key_update'
+2025-05-15 01:43:42,179 - synapse.federation.federation_server - 1408 - INFO - main - Registering federation EDU handler for 'org.matrix.signing_key_update'
+2025-05-15 01:43:42,179 - synapse.federation.federation_server - 1428 - INFO - main - Registering federation query handler for 'client_keys'
+2025-05-15 01:43:42,179 - twisted - 279 - INFO - main - Redirected stdout/stderr to logs
+2025-05-15 01:43:42,179 - synapse.app.homeserver - 180 - INFO - sentinel - Running
+2025-05-15 01:43:42,179 - synapse.app.homeserver - 36 - INFO - sentinel - Set file limit to: 9223372036854775807
+2025-05-15 01:43:42,179 - synapse.metrics._gc - 127 - INFO - sentinel - Collecting gc 2
+2025-05-15 01:43:42,218 - synapse.handlers.deactivate_account - 245 - INFO - user_parter_loop-0 - Starting user parter
+2025-05-15 01:43:42,219 - synapse.util.caches.lrucache - 230 - INFO - sentinel - Expiring LRU caches after 1800 seconds
+2025-05-15 01:43:42,222 - synapse.federation.federation_server - 1408 - INFO - sentinel - Registering federation EDU handler for 'm.receipt'
+2025-05-15 01:43:42,222 - synapse.federation.federation_server - 1408 - INFO - sentinel - Registering federation EDU handler for 'm.direct_to_device'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.health.HealthResource object at 0x107678590> to path b'/health'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.ClientRestResource object at 0x1076786e0> to path b'/_matrix/client'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <twisted.web.resource.Resource object at 0x1076c3380> to path b'/.well-known'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.http.server.JsonResource object at 0x1076b2900> to path b'/_synapse/admin'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.synapse.client.pick_idp.PickIdpResource object at 0x1076c3770> to path b'/_synapse/client/pick_idp'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <twisted.web.resource.Resource object at 0x1076bcb90> to path b'/_synapse/client/pick_username'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.synapse.client.new_user_consent.NewUserConsentResource object at 0x1076c3cb0> to path b'/_synapse/client/new_user_consent'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.synapse.client.sso_register.SsoRegisterResource object at 0x1076c3e00> to path b'/_synapse/client/sso_register'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.synapse.client.unsubscribe.UnsubscribeResource object at 0x1076cc050> to path b'/_synapse/client/unsubscribe'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching FilePath('/Users/victorwhyte/dev/orgs/kybershield/sayance-server/synapse/static') to path b'/_matrix/static'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.media.media_repository_resource.MediaRepositoryResource object at 0x1076cc440> to path b'/_matrix/media/r0'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.media.media_repository_resource.MediaRepositoryResource object at 0x1076cc440> to path b'/_matrix/media/v3'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.media.media_repository_resource.MediaRepositoryResource object at 0x1076cc440> to path b'/_matrix/media/v1'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.federation.transport.server.TransportLayerServer object at 0x1076ccd70> to path b'/_matrix/federation'
+2025-05-15 01:43:42,225 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.key.v2.KeyResource object at 0x1076cf8c0> to path b'/_matrix/key'
+2025-05-15 01:43:42,226 - twisted - 279 - INFO - sentinel - SynapseSite starting on 8008
+2025-05-15 01:43:42,226 - synapse.app._base - 439 - INFO - sentinel - Synapse now listening on TCP port 8008
+2025-05-15 01:43:42,262 - synapse.storage.background_updates - 410 - INFO - background_updates-0 - Starting background schema updates for database master
+2025-05-15 01:43:42,266 - synapse.push.pusherpool - 372 - INFO - start_pushers-0 - Started pushers
+2025-05-15 01:43:42,266 - synapse.handlers.deactivate_account - 255 - INFO - user_parter_loop-0 - User parter finished: stopping
+2025-05-15 01:43:42,278 - synapse.storage.background_updates - 428 - INFO - background_updates-0 - No more background updates to do. Unscheduling background update task.
+2025-05-15 01:43:44,761 - twisted - 279 - INFO - sentinel - Received SIGINT, shutting down.
+2025-05-15 01:43:44,762 - synapse.storage.databases.main.lock - 113 - INFO - LockStore._on_shutdown-0 - Dropping held locks due to shutdown
+2025-05-15 01:43:44,762 - synapse.storage.databases.main.lock - 124 - INFO - LockStore._on_shutdown-0 - Dropped locks due to shutdown
+2025-05-15 01:43:44,763 - synapse.handlers.presence - 891 - INFO - presence.on_shutdown-0 - Performing _on_shutdown. Persisting 0 unpersisted changes
+2025-05-15 01:43:44,763 - synapse.handlers.presence - 903 - INFO - presence.on_shutdown-0 - Finished _on_shutdown
+2025-05-15 01:43:44,764 - synapse.app._base - 509 - INFO - sentinel - Shutting down...
+2025-05-15 01:43:44,764 - twisted - 279 - INFO - sentinel - (TCP Port 8008 Closed)
+2025-05-15 01:43:44,766 - twisted - 279 - INFO - sentinel - Main loop terminated.
+2025-05-15 00:47:39,573 - root - 352 - WARNING - main - ***** STARTING SERVER *****
+2025-05-15 00:47:39,574 - root - 353 - WARNING - main - Server /usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py version 1.129.0
+2025-05-15 00:47:39,574 - root - 358 - WARNING - main - Copyright (c) 2023 New Vector, Inc
+2025-05-15 00:47:39,574 - root - 359 - WARNING - main - Licensed under the AGPL 3.0 license. Website: https://github.com/element-hq/synapse
+2025-05-15 00:47:39,574 - root - 362 - INFO - main - Server hostname: sayance.org
+2025-05-15 00:47:39,574 - root - 363 - INFO - main - Public Base URL: https://sayance.org/
+2025-05-15 00:47:39,574 - root - 364 - INFO - main - Instance name: master
+2025-05-15 00:47:39,574 - root - 365 - INFO - main - Twisted reactor: EPollReactor
+2025-05-15 00:47:39,574 - synapse.app.homeserver - 373 - INFO - main - Setting up server
+2025-05-15 00:47:39,574 - synapse.server - 357 - INFO - main - Setting up.
+2025-05-15 00:47:39,576 - synapse.app._base - 220 - ERROR - main - Exception during startup
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py", line 376, in setup
+    hs.setup()
+  File "/usr/local/lib/python3.12/site-packages/synapse/server.py", line 359, in setup
+    self.datastores = Databases(self.DATASTORE_CLASS, self)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/databases/__init__.py", line 76, in __init__
+    with make_conn(database_config, engine, "startup") as db_conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/database.py", line 168, in make_conn
+    native_db_conn = engine.module.connect(**db_params)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "localhost" (::1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-05-15 00:47:41,003 - root - 352 - WARNING - main - ***** STARTING SERVER *****
+2025-05-15 00:47:41,003 - root - 353 - WARNING - main - Server /usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py version 1.129.0
+2025-05-15 00:47:41,003 - root - 358 - WARNING - main - Copyright (c) 2023 New Vector, Inc
+2025-05-15 00:47:41,003 - root - 359 - WARNING - main - Licensed under the AGPL 3.0 license. Website: https://github.com/element-hq/synapse
+2025-05-15 00:47:41,004 - root - 362 - INFO - main - Server hostname: sayance.org
+2025-05-15 00:47:41,004 - root - 363 - INFO - main - Public Base URL: https://sayance.org/
+2025-05-15 00:47:41,004 - root - 364 - INFO - main - Instance name: master
+2025-05-15 00:47:41,004 - root - 365 - INFO - main - Twisted reactor: EPollReactor
+2025-05-15 00:47:41,004 - synapse.app.homeserver - 373 - INFO - main - Setting up server
+2025-05-15 00:47:41,004 - synapse.server - 357 - INFO - main - Setting up.
+2025-05-15 00:47:41,004 - synapse.app._base - 220 - ERROR - main - Exception during startup
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py", line 376, in setup
+    hs.setup()
+  File "/usr/local/lib/python3.12/site-packages/synapse/server.py", line 359, in setup
+    self.datastores = Databases(self.DATASTORE_CLASS, self)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/databases/__init__.py", line 76, in __init__
+    with make_conn(database_config, engine, "startup") as db_conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/database.py", line 168, in make_conn
+    native_db_conn = engine.module.connect(**db_params)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "localhost" (::1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-05-15 00:47:42,154 - root - 352 - WARNING - main - ***** STARTING SERVER *****
+2025-05-15 00:47:42,154 - root - 353 - WARNING - main - Server /usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py version 1.129.0
+2025-05-15 00:47:42,154 - root - 358 - WARNING - main - Copyright (c) 2023 New Vector, Inc
+2025-05-15 00:47:42,154 - root - 359 - WARNING - main - Licensed under the AGPL 3.0 license. Website: https://github.com/element-hq/synapse
+2025-05-15 00:47:42,154 - root - 362 - INFO - main - Server hostname: sayance.org
+2025-05-15 00:47:42,154 - root - 363 - INFO - main - Public Base URL: https://sayance.org/
+2025-05-15 00:47:42,154 - root - 364 - INFO - main - Instance name: master
+2025-05-15 00:47:42,154 - root - 365 - INFO - main - Twisted reactor: EPollReactor
+2025-05-15 00:47:42,154 - synapse.app.homeserver - 373 - INFO - main - Setting up server
+2025-05-15 00:47:42,154 - synapse.server - 357 - INFO - main - Setting up.
+2025-05-15 00:47:42,154 - synapse.app._base - 220 - ERROR - main - Exception during startup
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py", line 376, in setup
+    hs.setup()
+  File "/usr/local/lib/python3.12/site-packages/synapse/server.py", line 359, in setup
+    self.datastores = Databases(self.DATASTORE_CLASS, self)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/databases/__init__.py", line 76, in __init__
+    with make_conn(database_config, engine, "startup") as db_conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/database.py", line 168, in make_conn
+    native_db_conn = engine.module.connect(**db_params)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "localhost" (::1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-05-15 00:47:43,521 - root - 352 - WARNING - main - ***** STARTING SERVER *****
+2025-05-15 00:47:43,521 - root - 353 - WARNING - main - Server /usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py version 1.129.0
+2025-05-15 00:47:43,521 - root - 358 - WARNING - main - Copyright (c) 2023 New Vector, Inc
+2025-05-15 00:47:43,521 - root - 359 - WARNING - main - Licensed under the AGPL 3.0 license. Website: https://github.com/element-hq/synapse
+2025-05-15 00:47:43,521 - root - 362 - INFO - main - Server hostname: sayance.org
+2025-05-15 00:47:43,521 - root - 363 - INFO - main - Public Base URL: https://sayance.org/
+2025-05-15 00:47:43,521 - root - 364 - INFO - main - Instance name: master
+2025-05-15 00:47:43,521 - root - 365 - INFO - main - Twisted reactor: EPollReactor
+2025-05-15 00:47:43,521 - synapse.app.homeserver - 373 - INFO - main - Setting up server
+2025-05-15 00:47:43,521 - synapse.server - 357 - INFO - main - Setting up.
+2025-05-15 00:47:43,522 - synapse.app._base - 220 - ERROR - main - Exception during startup
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py", line 376, in setup
+    hs.setup()
+  File "/usr/local/lib/python3.12/site-packages/synapse/server.py", line 359, in setup
+    self.datastores = Databases(self.DATASTORE_CLASS, self)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/databases/__init__.py", line 76, in __init__
+    with make_conn(database_config, engine, "startup") as db_conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/database.py", line 168, in make_conn
+    native_db_conn = engine.module.connect(**db_params)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "localhost" (::1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-05-15 00:47:45,280 - root - 352 - WARNING - main - ***** STARTING SERVER *****
+2025-05-15 00:47:45,280 - root - 353 - WARNING - main - Server /usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py version 1.129.0
+2025-05-15 00:47:45,280 - root - 358 - WARNING - main - Copyright (c) 2023 New Vector, Inc
+2025-05-15 00:47:45,280 - root - 359 - WARNING - main - Licensed under the AGPL 3.0 license. Website: https://github.com/element-hq/synapse
+2025-05-15 00:47:45,280 - root - 362 - INFO - main - Server hostname: sayance.org
+2025-05-15 00:47:45,280 - root - 363 - INFO - main - Public Base URL: https://sayance.org/
+2025-05-15 00:47:45,280 - root - 364 - INFO - main - Instance name: master
+2025-05-15 00:47:45,280 - root - 365 - INFO - main - Twisted reactor: EPollReactor
+2025-05-15 00:47:45,280 - synapse.app.homeserver - 373 - INFO - main - Setting up server
+2025-05-15 00:47:45,281 - synapse.server - 357 - INFO - main - Setting up.
+2025-05-15 00:47:45,281 - synapse.app._base - 220 - ERROR - main - Exception during startup
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py", line 376, in setup
+    hs.setup()
+  File "/usr/local/lib/python3.12/site-packages/synapse/server.py", line 359, in setup
+    self.datastores = Databases(self.DATASTORE_CLASS, self)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/databases/__init__.py", line 76, in __init__
+    with make_conn(database_config, engine, "startup") as db_conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/database.py", line 168, in make_conn
+    native_db_conn = engine.module.connect(**db_params)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "localhost" (::1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-05-15 00:47:47,866 - root - 352 - WARNING - main - ***** STARTING SERVER *****
+2025-05-15 00:47:47,867 - root - 353 - WARNING - main - Server /usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py version 1.129.0
+2025-05-15 00:47:47,867 - root - 358 - WARNING - main - Copyright (c) 2023 New Vector, Inc
+2025-05-15 00:47:47,867 - root - 359 - WARNING - main - Licensed under the AGPL 3.0 license. Website: https://github.com/element-hq/synapse
+2025-05-15 00:47:47,868 - root - 362 - INFO - main - Server hostname: sayance.org
+2025-05-15 00:47:47,868 - root - 363 - INFO - main - Public Base URL: https://sayance.org/
+2025-05-15 00:47:47,868 - root - 364 - INFO - main - Instance name: master
+2025-05-15 00:47:47,868 - root - 365 - INFO - main - Twisted reactor: EPollReactor
+2025-05-15 00:47:47,868 - synapse.app.homeserver - 373 - INFO - main - Setting up server
+2025-05-15 00:47:47,868 - synapse.server - 357 - INFO - main - Setting up.
+2025-05-15 00:47:47,868 - synapse.app._base - 220 - ERROR - main - Exception during startup
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py", line 376, in setup
+    hs.setup()
+  File "/usr/local/lib/python3.12/site-packages/synapse/server.py", line 359, in setup
+    self.datastores = Databases(self.DATASTORE_CLASS, self)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/databases/__init__.py", line 76, in __init__
+    with make_conn(database_config, engine, "startup") as db_conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/database.py", line 168, in make_conn
+    native_db_conn = engine.module.connect(**db_params)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "localhost" (::1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-05-15 00:47:52,304 - root - 352 - WARNING - main - ***** STARTING SERVER *****
+2025-05-15 00:47:52,304 - root - 353 - WARNING - main - Server /usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py version 1.129.0
+2025-05-15 00:47:52,304 - root - 358 - WARNING - main - Copyright (c) 2023 New Vector, Inc
+2025-05-15 00:47:52,304 - root - 359 - WARNING - main - Licensed under the AGPL 3.0 license. Website: https://github.com/element-hq/synapse
+2025-05-15 00:47:52,304 - root - 362 - INFO - main - Server hostname: sayance.org
+2025-05-15 00:47:52,304 - root - 363 - INFO - main - Public Base URL: https://sayance.org/
+2025-05-15 00:47:52,304 - root - 364 - INFO - main - Instance name: master
+2025-05-15 00:47:52,304 - root - 365 - INFO - main - Twisted reactor: EPollReactor
+2025-05-15 00:47:52,304 - synapse.app.homeserver - 373 - INFO - main - Setting up server
+2025-05-15 00:47:52,304 - synapse.server - 357 - INFO - main - Setting up.
+2025-05-15 00:47:52,305 - synapse.app._base - 220 - ERROR - main - Exception during startup
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py", line 376, in setup
+    hs.setup()
+  File "/usr/local/lib/python3.12/site-packages/synapse/server.py", line 359, in setup
+    self.datastores = Databases(self.DATASTORE_CLASS, self)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/databases/__init__.py", line 76, in __init__
+    with make_conn(database_config, engine, "startup") as db_conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/database.py", line 168, in make_conn
+    native_db_conn = engine.module.connect(**db_params)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "localhost" (::1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-05-15 00:47:59,728 - root - 352 - WARNING - main - ***** STARTING SERVER *****
+2025-05-15 00:47:59,729 - root - 353 - WARNING - main - Server /usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py version 1.129.0
+2025-05-15 00:47:59,729 - root - 358 - WARNING - main - Copyright (c) 2023 New Vector, Inc
+2025-05-15 00:47:59,729 - root - 359 - WARNING - main - Licensed under the AGPL 3.0 license. Website: https://github.com/element-hq/synapse
+2025-05-15 00:47:59,729 - root - 362 - INFO - main - Server hostname: sayance.org
+2025-05-15 00:47:59,729 - root - 363 - INFO - main - Public Base URL: https://sayance.org/
+2025-05-15 00:47:59,729 - root - 364 - INFO - main - Instance name: master
+2025-05-15 00:47:59,729 - root - 365 - INFO - main - Twisted reactor: EPollReactor
+2025-05-15 00:47:59,729 - synapse.app.homeserver - 373 - INFO - main - Setting up server
+2025-05-15 00:47:59,730 - synapse.server - 357 - INFO - main - Setting up.
+2025-05-15 00:47:59,730 - synapse.app._base - 220 - ERROR - main - Exception during startup
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/synapse/app/homeserver.py", line 376, in setup
+    hs.setup()
+  File "/usr/local/lib/python3.12/site-packages/synapse/server.py", line 359, in setup
+    self.datastores = Databases(self.DATASTORE_CLASS, self)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/databases/__init__.py", line 76, in __init__
+    with make_conn(database_config, engine, "startup") as db_conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/synapse/storage/database.py", line 168, in make_conn
+    native_db_conn = engine.module.connect(**db_params)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "localhost" (::1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-05-15 01:48:27,355 - root - 352 - WARNING - main - ***** STARTING SERVER *****
+2025-05-15 01:48:27,355 - root - 353 - WARNING - main - Server /Users/victorwhyte/dev/orgs/kybershield/sayance-server/synapse/app/homeserver.py version 1.129.0 (b=feat/phone-auth,2a59566c2)
+2025-05-15 01:48:27,355 - root - 358 - WARNING - main - Copyright (c) 2023 New Vector, Inc
+2025-05-15 01:48:27,355 - root - 359 - WARNING - main - Licensed under the AGPL 3.0 license. Website: https://github.com/element-hq/synapse
+2025-05-15 01:48:27,355 - root - 362 - INFO - main - Server hostname: sayance.org
+2025-05-15 01:48:27,355 - root - 363 - INFO - main - Public Base URL: https://sayance.org/
+2025-05-15 01:48:27,355 - root - 364 - INFO - main - Instance name: master
+2025-05-15 01:48:27,356 - root - 365 - INFO - main - Twisted reactor: SelectReactor
+2025-05-15 01:48:27,356 - synapse.app.homeserver - 373 - INFO - main - Setting up server
+2025-05-15 01:48:27,356 - synapse.server - 357 - INFO - main - Setting up.
+2025-05-15 01:48:27,596 - synapse.storage.databases - 77 - INFO - main - [database config 'master']: Checking database server
+2025-05-15 01:48:27,605 - synapse.storage.databases - 80 - INFO - main - [database config 'master']: Preparing for databases ['main', 'state']
+2025-05-15 01:48:27,605 - synapse.storage.prepare_database - 135 - INFO - main - ['main', 'state']: Checking existing schema version
+2025-05-15 01:48:27,609 - synapse.storage.prepare_database - 139 - INFO - main - ['main', 'state']: Existing schema is 92 (+3 deltas)
+2025-05-15 01:48:27,610 - synapse.storage.databases.main - 395 - INFO - main - Checking database for consistency with configuration...
+2025-05-15 01:48:27,611 - synapse.storage.prepare_database - 433 - INFO - main - Applying schema deltas for v92
+2025-05-15 01:48:27,613 - synapse.storage.prepare_database - 568 - INFO - main - Schema now up to date
+2025-05-15 01:48:27,614 - synapse.storage.databases - 95 - INFO - main - [database config 'master']: Starting 'main' database
+2025-05-15 01:48:27,650 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for push_rules(id): 1
+2025-05-15 01:48:27,650 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for push_rules_enable(id): 1
+2025-05-15 01:48:27,657 - synapse.storage.databases.main.event_push_actions - 1242 - INFO - main - Searching for stream ordering 1 month ago
+2025-05-15 01:48:27,657 - synapse.storage.databases.main.event_push_actions - 1246 - INFO - main - Found stream ordering 1 month ago: it's 0
+2025-05-15 01:48:27,657 - synapse.storage.databases.main.event_push_actions - 1249 - INFO - main - Searching for stream ordering 1 day ago
+2025-05-15 01:48:27,657 - synapse.storage.databases.main.event_push_actions - 1253 - INFO - main - Found stream ordering 1 day ago: it's 0
+2025-05-15 01:48:27,661 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for access_tokens(id): 3
+2025-05-15 01:48:27,661 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for refresh_tokens(id): 1
+2025-05-15 01:48:27,664 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for event_reports(id): 1
+2025-05-15 01:48:27,664 - synapse.storage.util.id_generators - 98 - INFO - main - Initialising stream generator for room_reports(id): 1
+2025-05-15 01:48:27,675 - synapse.storage.databases - 112 - INFO - main - [database config 'master']: Starting 'state' database
+2025-05-15 01:48:27,677 - synapse.storage.databases - 128 - INFO - main - [database config 'master']: prepared
+2025-05-15 01:48:27,677 - synapse.server - 360 - INFO - main - Finished setting up.
+2025-05-15 01:48:27,726 - synapse.push.pusher - 45 - INFO - main - email enable notifs: False
+2025-05-15 01:48:27,729 - synapse.federation.federation_server - 1408 - INFO - main - Registering federation EDU handler for 'm.device_list_update'
+2025-05-15 01:48:27,729 - synapse.federation.federation_server - 1428 - INFO - main - Registering federation query handler for 'profile'
+2025-05-15 01:48:27,729 - synapse.federation.federation_server - 1408 - INFO - main - Registering federation EDU handler for 'm.presence'
+2025-05-15 01:48:27,730 - synapse.federation.federation_server - 1408 - INFO - main - Registering federation EDU handler for 'm.typing'
+2025-05-15 01:48:27,730 - synapse.federation.federation_server - 1428 - INFO - main - Registering federation query handler for 'directory'
+2025-05-15 01:48:27,730 - synapse.federation.federation_server - 1408 - INFO - main - Registering federation EDU handler for 'm.signing_key_update'
+2025-05-15 01:48:27,730 - synapse.federation.federation_server - 1408 - INFO - main - Registering federation EDU handler for 'org.matrix.signing_key_update'
+2025-05-15 01:48:27,730 - synapse.federation.federation_server - 1428 - INFO - main - Registering federation query handler for 'client_keys'
+2025-05-15 01:48:27,730 - twisted - 279 - INFO - main - Redirected stdout/stderr to logs
+2025-05-15 01:48:27,730 - synapse.app.homeserver - 180 - INFO - sentinel - Running
+2025-05-15 01:48:27,730 - synapse.app.homeserver - 36 - INFO - sentinel - Set file limit to: 9223372036854775807
+2025-05-15 01:48:27,730 - synapse.metrics._gc - 127 - INFO - sentinel - Collecting gc 2
+2025-05-15 01:48:27,764 - synapse.handlers.deactivate_account - 245 - INFO - user_parter_loop-0 - Starting user parter
+2025-05-15 01:48:27,764 - synapse.util.caches.lrucache - 230 - INFO - sentinel - Expiring LRU caches after 1800 seconds
+2025-05-15 01:48:27,768 - synapse.federation.federation_server - 1408 - INFO - sentinel - Registering federation EDU handler for 'm.receipt'
+2025-05-15 01:48:27,768 - synapse.federation.federation_server - 1408 - INFO - sentinel - Registering federation EDU handler for 'm.direct_to_device'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.health.HealthResource object at 0x107834590> to path b'/health'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.ClientRestResource object at 0x1078346e0> to path b'/_matrix/client'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <twisted.web.resource.Resource object at 0x10787b380> to path b'/.well-known'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.http.server.JsonResource object at 0x10786a900> to path b'/_synapse/admin'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.synapse.client.pick_idp.PickIdpResource object at 0x10787b770> to path b'/_synapse/client/pick_idp'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <twisted.web.resource.Resource object at 0x107874b90> to path b'/_synapse/client/pick_username'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.synapse.client.new_user_consent.NewUserConsentResource object at 0x10787bcb0> to path b'/_synapse/client/new_user_consent'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.synapse.client.sso_register.SsoRegisterResource object at 0x10787be00> to path b'/_synapse/client/sso_register'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.synapse.client.unsubscribe.UnsubscribeResource object at 0x107884050> to path b'/_synapse/client/unsubscribe'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching FilePath('/Users/victorwhyte/dev/orgs/kybershield/sayance-server/synapse/static') to path b'/_matrix/static'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.media.media_repository_resource.MediaRepositoryResource object at 0x107884440> to path b'/_matrix/media/r0'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.media.media_repository_resource.MediaRepositoryResource object at 0x107884440> to path b'/_matrix/media/v3'
+2025-05-15 01:48:27,770 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.media.media_repository_resource.MediaRepositoryResource object at 0x107884440> to path b'/_matrix/media/v1'
+2025-05-15 01:48:27,771 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.federation.transport.server.TransportLayerServer object at 0x107884d70> to path b'/_matrix/federation'
+2025-05-15 01:48:27,771 - synapse.util.httpresourcetree - 56 - INFO - sentinel - Attaching <synapse.rest.key.v2.KeyResource object at 0x1078878c0> to path b'/_matrix/key'
+2025-05-15 01:48:27,771 - twisted - 279 - INFO - sentinel - SynapseSite starting on 8008
+2025-05-15 01:48:27,771 - synapse.app._base - 439 - INFO - sentinel - Synapse now listening on TCP port 8008
+2025-05-15 01:48:27,807 - synapse.storage.background_updates - 410 - INFO - background_updates-0 - Starting background schema updates for database master
+2025-05-15 01:48:27,810 - synapse.handlers.deactivate_account - 255 - INFO - user_parter_loop-0 - User parter finished: stopping
+2025-05-15 01:48:27,811 - synapse.push.pusherpool - 372 - INFO - start_pushers-0 - Started pushers
+2025-05-15 01:48:27,818 - synapse.storage.background_updates - 428 - INFO - background_updates-0 - No more background updates to do. Unscheduling background update task.
+2025-05-15 01:48:36,260 - synapse.http.server - 130 - INFO - POST-0 - <XForwardedForRequest at 0x107803620 method='POST' uri='/_matrix/client/v3/health' clientproto='HTTP/1.1' site='8008'> SynapseError: 404 - Unrecognized request
+2025-05-15 01:48:36,262 - synapse.access.http.8008 - 508 - INFO - POST-0 - 127.0.0.1 - 8008 - {None} Processed request: 0.001sec/0.000sec (0.000sec, 0.000sec) (0.000sec/0.000sec/0) 59B 404 "POST /_matrix/client/v3/health HTTP/1.1" "PostmanRuntime/7.43.4" [0 dbevts]
+2025-05-15 01:48:39,199 - synapse.http.server - 130 - INFO - POST-1 - <XForwardedForRequest at 0x107875d10 method='POST' uri='/_matrix/client/v3/health' clientproto='HTTP/1.1' site='8008'> SynapseError: 404 - Unrecognized request
+2025-05-15 01:48:39,199 - synapse.access.http.8008 - 508 - INFO - POST-1 - 127.0.0.1 - 8008 - {None} Processed request: 0.000sec/0.000sec (0.000sec, 0.000sec) (0.000sec/0.000sec/0) 59B 404 "POST /_matrix/client/v3/health HTTP/1.1" "PostmanRuntime/7.43.4" [0 dbevts]
+2025-05-15 01:48:57,667 - synapse.storage.databases.main.event_push_actions - 1396 - INFO - rotate_notifs-0 - Rotating notifications
+2025-05-15 01:48:57,671 - synapse.storage.databases.main.event_push_actions - 1599 - INFO - rotate_notifs-0 - Rotating notifications up to: 1
+2025-05-15 01:48:57,675 - synapse.storage.databases.main.event_push_actions - 1685 - INFO - rotate_notifs-0 - Rotating notifications, handling 0 rows
+2025-05-15 01:48:57,685 - synapse.storage.databases.main.event_push_actions - 1770 - INFO - rotate_notifs-0 - Rotating notifications, deleted 0 push actions
+2025-05-15 01:48:57,765 - synapse.util.caches.lrucache - 217 - INFO - LruCache._expire_old_entries-0 - Dropped 0 items from caches
+2025-05-15 01:49:27,667 - synapse.storage.databases.main.event_push_actions - 1396 - INFO - rotate_notifs-1 - Rotating notifications
+2025-05-15 01:49:27,676 - synapse.storage.databases.main.event_push_actions - 1599 - INFO - rotate_notifs-1 - Rotating notifications up to: 1
+2025-05-15 01:49:27,679 - synapse.storage.databases.main.event_push_actions - 1685 - INFO - rotate_notifs-1 - Rotating notifications, handling 0 rows
+2025-05-15 01:49:27,684 - synapse.storage.databases.main.event_push_actions - 1770 - INFO - rotate_notifs-1 - Rotating notifications, deleted 0 push actions
+2025-05-15 01:49:27,769 - synapse.util.caches.lrucache - 217 - INFO - LruCache._expire_old_entries-1 - Dropped 0 items from caches
+2025-05-15 01:49:39,202 - twisted - 279 - INFO - sentinel - Timing out client: IPv4Address(type='TCP', host='127.0.0.1', port=54693)
+2025-05-15 01:49:57,666 - synapse.storage.databases.main.event_push_actions - 1396 - INFO - rotate_notifs-2 - Rotating notifications
+2025-05-15 01:49:57,669 - synapse.storage.databases.main.event_push_actions - 1599 - INFO - rotate_notifs-2 - Rotating notifications up to: 1
+2025-05-15 01:49:57,672 - synapse.storage.databases.main.event_push_actions - 1685 - INFO - rotate_notifs-2 - Rotating notifications, handling 0 rows
+2025-05-15 01:49:57,679 - synapse.storage.databases.main.event_push_actions - 1770 - INFO - rotate_notifs-2 - Rotating notifications, deleted 0 push actions
+2025-05-15 01:49:57,770 - synapse.util.caches.lrucache - 217 - INFO - LruCache._expire_old_entries-2 - Dropped 0 items from caches
+2025-05-15 01:49:58,701 - twisted - 279 - INFO - sentinel - Received SIGINT, shutting down.
+2025-05-15 01:49:58,702 - synapse.storage.databases.main.lock - 113 - INFO - LockStore._on_shutdown-0 - Dropping held locks due to shutdown
+2025-05-15 01:49:58,702 - synapse.storage.databases.main.lock - 124 - INFO - LockStore._on_shutdown-0 - Dropped locks due to shutdown
+2025-05-15 01:49:58,703 - synapse.handlers.presence - 891 - INFO - presence.on_shutdown-0 - Performing _on_shutdown. Persisting 0 unpersisted changes
+2025-05-15 01:49:58,703 - synapse.handlers.presence - 903 - INFO - presence.on_shutdown-0 - Finished _on_shutdown
+2025-05-15 01:49:58,706 - synapse.app._base - 509 - INFO - sentinel - Shutting down...
+2025-05-15 01:49:58,709 - twisted - 279 - INFO - sentinel - (TCP Port 8008 Closed)
+2025-05-15 01:49:58,718 - twisted - 279 - INFO - sentinel - Main loop terminated.

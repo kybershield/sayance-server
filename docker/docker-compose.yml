@@ -14,17 +14,23 @@ services:
       - ../config:/data/config
       # Create symlink for config path resolution
       - ../config:/config
+      # Directory for signing key
+      - synapse-keys:/data/keys
     ports:
       - "8008:8008"
     environment:
       - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
     working_dir: /data
+    # Ensure we have the right permissions
+    entrypoint: /bin/sh
+    command: -c "mkdir -p /data/keys && ln -sf /data/keys/sayance.signing.key /data/sayance.signing.key && python -m synapse.app.homeserver --config-path /data/homeserver.yaml"
     healthcheck:
-      test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
+      test: ["CMD", "curl", "-fSs", "http://localhost:8008/"]
       interval: 15s
       timeout: 5s
       retries: 3
       start_period: 5s
 
 volumes:
-  synapse-data: 
+  synapse-data:
+  synapse-keys: 
