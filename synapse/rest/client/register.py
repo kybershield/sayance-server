@@ -1184,8 +1184,9 @@ class PhoneRegistrationVerifyServlet(RestServlet):
                 return 400, {"error": str(e)}
         else:
             # Generate username from last part of phone number
-            # For example, +2348166406459 becomes "user_6406459"
-            base_username = "user_" + msisdn[-7:]
+            # For example, +2348166406459 becomes "2348166406459"
+            base_username = msisdn
+            # base_username = "user_" + msisdn[-7:]
             desired_username = base_username
             
             # Try to find a username that's not taken
