@@ -1,0 +1,66 @@
+# GitHub actions workflow which builds and publishes the docker images.
+
+name: Build docker images
+
+on:
+  push:
+    tags: ["v*"]
+    branches: [ master, main, develop ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write # needed for signing the images with GitHub OIDC Token
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+
+      - name: Inspect builder
+        run: docker buildx inspect
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@3454372f43399081ed03b604cb2d021dabca52bb # v3.8.2
+
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Extract version from pyproject.toml
+        # Note: explicitly requesting bash will mean bash is invoked with `-eo pipefail`, see
+        # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
+        shell: bash
+        run: |
+          echo "SYNAPSE_VERSION=$(grep "^version" pyproject.toml | sed -E 's/version\s*=\s*["]([^"]*)["]/\1/')" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.AZURE_LOGIN_SERVER }}
+          username: ${{ secrets.AZURE_USERNAME }}
+          password: ${{ secrets.AZURE_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6.15.0
+        with:
+          push: true
+          tags: ${{ secrets.AZURE_TAG }}
+          file: "docker/Dockerfile"
+          platforms: linux/amd64,linux/arm64
+
+          # arm64 builds OOM without the git fetch setting. c.f.
+          # https://github.com/rust-lang/cargo/issues/10583
+          build-args: |
+            CARGO_NET_GIT_FETCH_WITH_CLI=true
