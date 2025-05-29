@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  auth-service:
+    image: ghcr.io/element-hq/lk-jwt-service:latest
+    container_name: sayance-element-call-jwt
+    hostname: auth-server
+    environment:
+      - LK_JWT_PORT=8080
+      - LIVEKIT_URL=https://matrixrtc.sayance.io/livekit/sfu
+      - LIVEKIT_KEY=devkey
+      - LIVEKIT_SECRET=sayance_super_secret_key_2024_element_call
+      - LIVEKIT_LOCAL_HOMESERVERS=sayance.io
+    restart: unless-stopped
+    ports:
+      - "8070:8080"
+    networks:
+      - sayance-network
+
+  livekit:
+    image: livekit/livekit-server:latest
+    container_name: sayance-element-call-livekit
+    command: --config /etc/livekit.yaml
+    ports:
+      - "7880:7880/tcp"
+      - "7881:7881/tcp"
+      - "50100-50200:50100-50200/udp"
+    restart: unless-stopped
+    volumes:
+      - ./element-call-config.yaml:/etc/livekit.yaml:ro
+    networks:
+      - sayance-network
+
+networks:
+  sayance-network:
+    driver: bridge 

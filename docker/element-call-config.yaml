@@ -1,0 +1,32 @@
+port: 7880
+bind_addresses:
+  - ""
+
+rtc:
+  tcp_port: 7881
+  port_range_start: 50100
+  port_range_end: 50200
+  use_external_ip: true
+  external_ip: 192.168.1.81 
+
+redis: {}
+
+keys:
+  devkey: sayance_super_secret_key_2024_element_call
+
+region: sayance-homeserver
+
+logging:
+  level: info
+  pion_level: warn
+
+# Enable webhooks for room events
+webhook:
+  api_key: sayance_webhook_key_2024
+
+# Room configuration
+room:
+  # Maximum number of participants per room
+  max_participants: 100
+  # Timeout for empty rooms (in seconds)
+  empty_timeout: 300 

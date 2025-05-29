@@ -8,17 +8,20 @@ services:
     restart: always
     volumes:
       - synapse-data:/data
-      - ../homeserver.yaml:/data/homeserver.yaml:ro
+      - ../homeserver.dev.yaml:/data/homeserver.yaml:ro
       - ../config:/data/config
       - ../config:/config
       - synapse-keys:/data/keys
     ports:
       - "8008:8008"
+      - "8448:8448"
+    expose:
+      - "8448"
     environment:
       - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
     working_dir: /data
     entrypoint: /bin/sh
-    command: -c "mkdir -p /data/keys && ln -sf /data/keys/sayance.signing.key /data/sayance.signing.key && python -m synapse.app.homeserver --config-path /data/homeserver.yaml"
+    command: -c "mkdir -p /data/keys && ln -sf /data/keys/localhost.signing.key /data/localhost.signing.key && python -m synapse.app.homeserver --config-path /data/homeserver.yaml"
     healthcheck:
       test: ["CMD", "curl", "-fSs", "http://localhost:8008/"]
       interval: 15s
@@ -27,6 +30,8 @@ services:
       start_period: 5s
     depends_on:
       - postgres
+    extra_hosts:
+      - "sayance.local:127.0.0.1"
     networks:
       - sayance-network
 
@@ -58,6 +63,41 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - sayance-network
+
+  auth-service:
+    image: ghcr.io/element-hq/lk-jwt-service:latest
+    container_name: sayance-element-call-jwt-dev
+    hostname: auth-server
+    environment:
+      - LK_JWT_PORT=8080
+      - LIVEKIT_URL=ws://livekit:7880
+      - LIVEKIT_KEY=devkey
+      - LIVEKIT_SECRET=sayance_super_secret_key_2024_element_call
+      - LIVEKIT_LOCAL_HOMESERVERS=http://192.168.1.81:8448
+      - LIVEKIT_INSECURE_SKIP_VERIFY_TLS=YES_I_KNOW_WHAT_I_AM_DOING
+      - MATRIX_HOMESERVER_URL=http://synapse:8008
+    restart: unless-stopped
+    ports:
+      - "8070:8080"
+    depends_on:
+      - livekit
+      - synapse
+    networks:
+      - sayance-network
+
+  livekit:
+    image: livekit/livekit-server:latest
+    container_name: sayance-element-call-livekit-dev
+    command: --config /etc/livekit.yaml
+    ports:
+      - "7880:7880/tcp"
+      - "7881:7881/tcp"
+      - "50100-50200:50100-50200/udp"
+    restart: unless-stopped
+    volumes:
+      - ./element-call-config.yaml:/etc/livekit.yaml:ro
     networks:
       - sayance-network
 
