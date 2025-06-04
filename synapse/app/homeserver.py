@@ -63,6 +63,7 @@ from synapse.logging.context import LoggingContext
 from synapse.metrics import METRICS_PREFIX, MetricsResource, RegistryProxy
 from synapse.replication.http import REPLICATION_PREFIX, ReplicationRestResource
 from synapse.rest import ClientRestResource, admin
+from synapse.rest.push import push_gateway
 from synapse.rest.health import HealthResource
 from synapse.rest.key.v2 import KeyResource
 from synapse.rest.synapse.client import build_synapse_client_resource_tree
@@ -183,11 +184,15 @@ class SynapseHomeServer(HomeServer):
             admin_resource = JsonResource(self, canonical_json=False)
             admin.register_servlets(self, admin_resource)
 
+            push_resource = JsonResource(self, canonical_json=False)
+            push_gateway.register_servlets(self, push_resource)
+
             resources.update(
                 {
                     CLIENT_API_PREFIX: client_resource,
                     "/.well-known": well_known_resource(self),
                     "/_synapse/admin": admin_resource,
+                    "/_matrix/push/v1": push_resource,
                     **build_synapse_client_resource_tree(self),
                 }
             )

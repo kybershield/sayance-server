@@ -110,6 +110,7 @@ from synapse.storage.databases.main.user_directory import UserDirectoryStore
 from synapse.storage.databases.main.user_erasure_store import UserErasureWorkerStore
 from synapse.util import SYNAPSE_VERSION
 from synapse.util.httpresourcetree import create_resource_tree
+from synapse.rest.push import push_gateway
 
 logger = logging.getLogger("synapse.app.generic_worker")
 
@@ -177,10 +178,12 @@ class GenericWorkerServer(HomeServer):
 
         # We always include an admin resource that we populate with servlets as needed
         admin_resource = JsonResource(self, canonical_json=False)
+        push_resource = JsonResource(self, canonical_json=False)
         resources: Dict[str, Resource] = {
             # We always include a health resource.
             "/health": HealthResource(),
             "/_synapse/admin": admin_resource,
+            "/_matrix/push/v1": push_resource,
         }
 
         for res in listener_config.http_options.resources:
@@ -195,6 +198,7 @@ class GenericWorkerServer(HomeServer):
                     resources.update(build_synapse_client_resource_tree(self))
                     resources["/.well-known"] = well_known_resource(self)
                     admin.register_servlets(self, admin_resource)
+                    push_gateway.register_servlets(self, push_resource)
 
                 elif name == "federation":
                     resources[FEDERATION_PREFIX] = TransportLayerServer(self)

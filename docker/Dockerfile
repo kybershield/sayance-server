@@ -102,6 +102,10 @@ COPY pyproject.toml README.rst build_rust.py Cargo.toml Cargo.lock /synapse/
 # Repeat of earlier build argument declaration, as this is a new build stage.
 ARG TEST_ONLY_IGNORE_POETRY_LOCKFILE
 
+# Install Expo SDK
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv pip install --prefix="/install" exponent-server-sdk>=2.0.0
+
 # Install the synapse package itself.
 # If we have populated requirements.txt, we don't install any dependencies
 # as we should already have those from the previous `pip install` step.
