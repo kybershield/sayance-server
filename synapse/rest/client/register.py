@@ -36,6 +36,7 @@ from synapse.api.constants import (
 from synapse.api.errors import (
     Codes,
     InteractiveAuthIncompleteError,
+    LimitExceededError,
     NotApprovedError,
     SynapseError,
     ThreepidValidationError,
@@ -972,6 +973,19 @@ class PhoneRegistrationTokenServlet(RestServlet):
         self.registration_handler = hs.get_registration_handler()
         self.clock = hs.get_clock()
         self.sms_sender = PhoneSMSSender(hs)
+        
+        # Rate limiter for phone OTP requests (2 minutes between requests per phone number)
+        from synapse.config.ratelimiting import RatelimitSettings
+        phone_rate_config = RatelimitSettings(
+            key="phone_verification",
+            per_second=1.0 / 120.0,  # 1 request per 120 seconds (2 minutes)
+            burst_count=1
+        )
+        self.phone_ratelimiter = Ratelimiter(
+            store=self.store,
+            clock=hs.get_clock(),
+            cfg=phone_rate_config,
+        )
 
     async def on_POST(self, request: SynapseRequest) -> Tuple[int, JsonDict]:
         """Handle phone number submission and send OTP (mocked for now)
@@ -1012,6 +1026,18 @@ class PhoneRegistrationTokenServlet(RestServlet):
                 Codes.THREEPID_DENIED,
             )
 
+        # Rate limiting: Prevent multiple OTP requests for same phone number within 2 minutes
+        # Use the normalized phone number as the rate limit key
+        try:
+            await self.phone_ratelimiter.ratelimit(None, (normalized_phone,), update=True)
+        except LimitExceededError:
+            logger.info(f"Rate limit exceeded for phone number {normalized_phone}")
+            raise SynapseError(
+                429, 
+                "Too many OTP requests. Please wait 2 minutes before requesting again.", 
+                Codes.LIMIT_EXCEEDED
+            )
+        
         # Check if phone number is already in use - but don't error, just track this
         existing_user_id = await self.store.get_user_id_by_threepid("msisdn", msisdn)
         
@@ -1024,26 +1050,22 @@ class PhoneRegistrationTokenServlet(RestServlet):
         )
         session_id = session.session_id
         
-        # Store the phone number in the session for later use
+        # Generate a verification code
+        verification_code = await self.sms_sender.generate_verification_code()
+        
+        # Store the session data
         await self.auth_handler.set_session_data(
             session_id,
             "phone_registration_msisdn",
             msisdn
         )
         
-        # Store whether this is a login (existing user) or registration (new user)
         await self.auth_handler.set_session_data(
             session_id,
-            "phone_existing_user_id",
-            existing_user_id  # Will be None for registration, user_id for login
+            "phone_existing_user_id", 
+            existing_user_id
         )
-
-        # Generate a verification code
-        verification_code = await self.sms_sender.generate_verification_code()
-        print(f"Verification code: {verification_code}")
         
-        # In a real implementation, we would store a hashed version of the code
-        # Here we're just storing it directly for simplicity
         await self.auth_handler.set_session_data(
             session_id,
             "phone_registration_otp",
@@ -1057,6 +1079,8 @@ class PhoneRegistrationTokenServlet(RestServlet):
             "phone_registration_otp_expiry",
             expiry_time
         )
+        
+        print(f"Verification code: {verification_code}")
 
         # Send the verification code with country code for better parsing
         # Don't let SMS sending failures break the flow - log and continue
