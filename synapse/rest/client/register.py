@@ -36,6 +36,7 @@ from synapse.api.constants import (
 from synapse.api.errors import (
     Codes,
     InteractiveAuthIncompleteError,
+    LimitExceededError,
     NotApprovedError,
     SynapseError,
     ThreepidValidationError,
@@ -972,6 +973,19 @@ class PhoneRegistrationTokenServlet(RestServlet):
         self.registration_handler = hs.get_registration_handler()
         self.clock = hs.get_clock()
         self.sms_sender = PhoneSMSSender(hs)
+        
+        # Rate limiter for phone OTP requests (2 minutes between requests per phone number)
+        from synapse.config.ratelimiting import RatelimitSettings
+        phone_rate_config = RatelimitSettings(
+            key="phone_verification",
+            per_second=1.0 / 120.0,  # 1 request per 120 seconds (2 minutes)
+            burst_count=1
+        )
+        self.phone_ratelimiter = Ratelimiter(
+            store=self.store,
+            clock=hs.get_clock(),
+            cfg=phone_rate_config,
+        )
 
     async def on_POST(self, request: SynapseRequest) -> Tuple[int, JsonDict]:
         """Handle phone number submission and send OTP (mocked for now)
@@ -993,8 +1007,17 @@ class PhoneRegistrationTokenServlet(RestServlet):
         country = body.get("country", "")  # Country can be optional and inferred from phone number
         send_attempt = body["send_attempt"]
 
-        # Convert to MSISDN format (international format)
-        msisdn = phone_number_to_msisdn(country, phone_number)
+        # Normalize the phone number to E164 format  
+        normalized_phone = self.sms_sender._normalize_phone_number(phone_number, country)
+        if not normalized_phone:
+            raise SynapseError(
+                400, 
+                f"Invalid phone number format: {phone_number}. Please use international format like +1234567890", 
+                Codes.INVALID_PARAM
+            )
+        
+        # Use the existing msisdn conversion for compatibility with existing systems
+        msisdn = phone_number_to_msisdn(country, phone_number) if country else normalized_phone
 
         if not await check_3pid_allowed(self.hs, "msisdn", msisdn, registration=True):
             raise SynapseError(
@@ -1003,6 +1026,18 @@ class PhoneRegistrationTokenServlet(RestServlet):
                 Codes.THREEPID_DENIED,
             )
 
+        # Rate limiting: Prevent multiple OTP requests for same phone number within 2 minutes
+        # Use the normalized phone number as the rate limit key
+        try:
+            await self.phone_ratelimiter.ratelimit(None, (normalized_phone,), update=True)
+        except LimitExceededError:
+            logger.info(f"Rate limit exceeded for phone number {normalized_phone}")
+            raise SynapseError(
+                429, 
+                "Too many OTP requests. Please wait 2 minutes before requesting again.", 
+                Codes.LIMIT_EXCEEDED
+            )
+        
         # Check if phone number is already in use - but don't error, just track this
         existing_user_id = await self.store.get_user_id_by_threepid("msisdn", msisdn)
         
@@ -1015,25 +1050,22 @@ class PhoneRegistrationTokenServlet(RestServlet):
         )
         session_id = session.session_id
         
-        # Store the phone number in the session for later use
+        # Generate a verification code
+        verification_code = await self.sms_sender.generate_verification_code()
+        
+        # Store the session data
         await self.auth_handler.set_session_data(
             session_id,
             "phone_registration_msisdn",
             msisdn
         )
         
-        # Store whether this is a login (existing user) or registration (new user)
         await self.auth_handler.set_session_data(
             session_id,
-            "phone_existing_user_id",
-            existing_user_id  # Will be None for registration, user_id for login
+            "phone_existing_user_id", 
+            existing_user_id
         )
-
-        # Generate a verification code
-        verification_code = await self.sms_sender.generate_verification_code()
         
-        # In a real implementation, we would store a hashed version of the code
-        # Here we're just storing it directly for simplicity
         await self.auth_handler.set_session_data(
             session_id,
             "phone_registration_otp",
@@ -1047,24 +1079,37 @@ class PhoneRegistrationTokenServlet(RestServlet):
             "phone_registration_otp_expiry",
             expiry_time
         )
-
-        # Send the verification code
-        sent = await self.sms_sender.send_verification_code(msisdn, verification_code)
         
-        if not sent:
-            raise SynapseError(
-                500, "Failed to send verification code", Codes.SERVER_ERROR
+        print(f"Verification code: {verification_code}")
+
+        # Send the verification code with country code for better parsing
+        # Don't let SMS sending failures break the flow - log and continue
+        sms_sent = False
+        try:
+            sms_sent = await self.sms_sender.send_verification_code(
+                phone_number, verification_code, country
             )
+            if sms_sent:
+                logger.info(f"SMS verification code sent successfully to {normalized_phone}")
+            else:
+                logger.warning(f"Failed to send SMS to {normalized_phone}, but continuing flow")
+        except Exception as e:
+            logger.error(f"Exception while sending SMS to {normalized_phone}: {e}", exc_info=True)
+            # Continue the flow even if SMS fails
 
-        logger.info(f"Phone verification initiated for {msisdn}, session: {session_id}, {'login' if existing_user_id else 'registration'}")
+        logger.info(f"Phone verification initiated for {normalized_phone}, session: {session_id}, {'login' if existing_user_id else 'registration'}, SMS sent: {sms_sent}")
         
-        # Return the session ID to the client
-        return 200, {
+        # Return the session ID to the client with SMS status
+        response = {
             "sid": session_id,
-            # "is_login": existing_user_id is not None,  # Tell client if this is login or registration
-            # For development only - remove in production
-            # "mock_otp": verification_code
+            "sms_sent": sms_sent,  # Let client know if SMS was actually sent
         }
+        
+        # In development/mock mode, include the OTP for easier testing
+        if not self.config.sms.clicksend_enabled:
+            response["mock_otp"] = verification_code
+            
+        return 200, response
 
 
 class PhoneRegistrationVerifyServlet(RestServlet):

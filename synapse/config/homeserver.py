@@ -31,6 +31,7 @@ from .cas import CasConfig
 from .consent import ConsentConfig
 from .database import DatabaseConfig
 from .emailconfig import EmailConfig
+from .smsconfig import SMSConfig
 from .experimental import ExperimentalConfig
 from .federation import FederationConfig
 from .jwt import JWTConfig
@@ -91,6 +92,7 @@ class HomeServerConfig(RootConfig):
         JWTConfig,
         AuthConfig,
         EmailConfig,
+        SMSConfig,
         PasswordAuthProviderConfig,
         PushConfig,
         SpamCheckerConfig,

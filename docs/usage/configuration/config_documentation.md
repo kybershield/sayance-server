@@ -821,6 +821,34 @@ email:
     password_reset: "[%(server_name)s] Password reset"
     email_validation: "[%(server_name)s] Validate your email"
 ```
+
+---
+## SMS
+
+Configuration for sending SMS messages via ClickSend for phone verification during registration and login.
+
+This setting has the following sub-options:
+* `clicksend_enabled`: Set to true to enable SMS sending via ClickSend. Defaults to false.
+* `clicksend_username`: Your ClickSend username (usually your email address).
+* `clicksend_api_key`: Your ClickSend API key. You can find this in your ClickSend dashboard.
+* `clicksend_sender_id`: The sender ID for SMS messages. This can be a phone number in E.164 format 
+  (e.g., "+1234567890") or an alpha tag (e.g., "YourApp"). Alpha tags are sender names that appear
+  instead of a phone number, but recipients cannot reply to alpha tags.
+
+To use SMS functionality:
+1. Sign up for a ClickSend account at https://www.clicksend.com/
+2. Install the ClickSend client: `pip install matrix-synapse[sms]` or `pip install clicksend-client`
+3. Configure your ClickSend credentials in the `sms` section of your homeserver configuration
+
+Example configuration:
+```yaml
+sms:
+  clicksend_enabled: true
+  clicksend_username: "your_username@example.com"
+  clicksend_api_key: "your_api_key_here"
+  clicksend_sender_id: "+1234567890"  # or "YourApp" for alpha tag
+```
+
 ---
 ### `max_event_delay_duration`
 
@@ -4989,3 +5017,34 @@ auto_accept_invites:
     only_from_local_users: true
     worker_to_run_on: "worker_1"
 ```
+
+```yaml
+## SMS
+
+Configuration for sending SMS messages via ClickSend for phone verification during registration and login.
+
+This setting has the following sub-options:
+* `clicksend_enabled`: Set to true to enable SMS sending via ClickSend. Defaults to false.
+* `clicksend_username`: Your ClickSend username (usually your email address).
+* `clicksend_api_key`: Your ClickSend API key. You can find this in your ClickSend dashboard.
+* `clicksend_sender_id`: The sender ID for SMS messages. This can be a phone number in E.164 format 
+  (e.g., "+1234567890") or an alpha tag (e.g., "YourApp"). Alpha tags are sender names that appear
+  instead of a phone number, but recipients cannot reply to alpha tags.
+
+To use SMS functionality:
+1. Sign up for a ClickSend account at https://www.clicksend.com/
+2. Install the ClickSend client: `pip install matrix-synapse[sms]` or `pip install clicksend-client`
+3. Configure your ClickSend credentials in the `sms` section of your homeserver configuration
+
+Example configuration:
+```yaml
+sms:
+  clicksend_enabled: true
+  clicksend_username: "your_username@example.com"
+  clicksend_api_key: "your_api_key_here"
+  clicksend_sender_id: "+1234567890"  # or "YourApp" for alpha tag
+```
+
+---
+## Homeserver blocking
+</rewritten_file>
