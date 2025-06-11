@@ -38,8 +38,8 @@ class SMSConfig(Config):
                 raise ConfigError("sms.clicksend_username is required when clicksend_enabled is true")
             if not self.clicksend_api_key:
                 raise ConfigError("sms.clicksend_api_key is required when clicksend_enabled is true")
-            if not self.clicksend_sender_id:
-                raise ConfigError("sms.clicksend_sender_id is required when clicksend_enabled is true")
+            # if not self.clicksend_sender_id:
+            #     raise ConfigError("sms.clicksend_sender_id is required when clicksend_enabled is true")
 
     def generate_config_section(self, **kwargs: Any) -> str:
         return """
