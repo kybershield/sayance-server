@@ -31,6 +31,7 @@ from synapse.config import (  # noqa: F401
     consent,
     database,
     emailconfig,
+    smsconfig,
     experimental,
     federation,
     jwt,
@@ -103,6 +104,7 @@ class RootConfig:
     jwt: jwt.JWTConfig
     auth: auth.AuthConfig
     email: emailconfig.EmailConfig
+    sms: smsconfig.SMSConfig
     worker: workers.WorkerConfig
     authproviders: password_auth_providers.PasswordAuthProviderConfig
     push: push.PushConfig

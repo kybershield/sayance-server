@@ -355,6 +355,25 @@ files = [
 colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
+name = "clicksend-client"
+version = "5.0.78"
+description = "ClickSend v3 API"
+optional = true
+python-versions = "*"
+groups = ["main"]
+markers = "extra == \"sms\" or extra == \"all\""
+files = [
+    {file = "clicksend-client-5.0.78.tar.gz", hash = "sha256:b5a49c150f7612544e7e4718d0729ae05328d2dfc7b137c006d772ea04757da8"},
+    {file = "clicksend_client-5.0.78-py3-none-any.whl", hash = "sha256:8c1391e68ba9933bcd42f1aeb190fa5d75e612b26f9514dfa4d45b80a4f9d7ff"},
+]
+
+[package.dependencies]
+certifi = ">=2017.4.17"
+python-dateutil = ">=2.1"
+six = ">=1.10"
+urllib3 = ">=1.23"
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 description = "Cross-platform colored terminal text."
@@ -2119,7 +2138,7 @@ description = "Extensions to the standard Python datetime module"
 optional = true
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 groups = ["main"]
-markers = "extra == \"saml2\" or extra == \"all\""
+markers = "extra == \"saml2\" or extra == \"all\" or extra == \"sms\""
 files = [
     {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
@@ -3377,7 +3396,7 @@ docs = ["Sphinx", "repoze.sphinx.autointerface"]
 test = ["zope.i18nmessageid", "zope.testing", "zope.testrunner"]
 
 [extras]
-all = ["Pympler", "authlib", "hiredis", "jaeger-client", "lxml", "matrix-synapse-ldap3", "opentracing", "psycopg2", "psycopg2cffi", "psycopg2cffi-compat", "pyicu", "pysaml2", "sentry-sdk", "txredisapi"]
+all = ["Pympler", "authlib", "clicksend-client", "hiredis", "jaeger-client", "lxml", "matrix-synapse-ldap3", "opentracing", "psycopg2", "psycopg2cffi", "psycopg2cffi-compat", "pyicu", "pysaml2", "sentry-sdk", "txredisapi"]
 cache-memory = ["Pympler"]
 jwt = ["authlib"]
 matrix-synapse-ldap3 = ["matrix-synapse-ldap3"]
@@ -3387,6 +3406,7 @@ postgres = ["psycopg2", "psycopg2cffi", "psycopg2cffi-compat"]
 redis = ["hiredis", "txredisapi"]
 saml2 = ["pysaml2"]
 sentry = ["sentry-sdk"]
+sms = ["clicksend-client"]
 systemd = ["systemd-python"]
 test = ["idna", "parameterized"]
 url-preview = ["lxml"]
@@ -3395,4 +3415,4 @@ user-search = ["pyicu"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9.0"
-content-hash = "168ea6a3359062792c886e06406fcc6a26078817813c48650e2a182b8ccff6dd"
+content-hash = "c11242a47521d0367d572b16bbd62627714ddc75d48c318a3ecb6c1cd7eb00f3"
