@@ -93,3 +93,6 @@ sayance.signing.key
 *.p12
 *.p8
 *.srl
+
+# Secrets
+.env
