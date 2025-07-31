@@ -16,6 +16,8 @@ services:
       - ../config:/config
       # Directory for signing key
       - synapse-keys:/data/keys
+      # Mount secrets directory
+      - ../secrets:/data/secrets:ro
     ports:
       - "8008:8008"
     environment:
