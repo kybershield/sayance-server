@@ -57,6 +57,7 @@ services:
       - ../config:/data/config
       - ../config:/config
       - synapse-keys:/data/keys
+      - ../secrets:/data/secrets:ro
     environment:
       - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
     working_dir: /data

@@ -231,6 +231,10 @@ python-multipart = ">=0.0.9"
 # Required for Expo push notifications
 exponent-server-sdk = ">=2.0.0"
 
+# Required for VoIP push notifications (APN and FCM)
+aioapns = ">=2.0.0"
+firebase-admin = ">=6.0.0"
+
 # Optional Dependencies
 # ---------------------
 matrix-synapse-ldap3 = { version = ">=0.1", optional = true }

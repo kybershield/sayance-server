@@ -1,0 +1,50 @@
+# Example configuration for VoIP push notifications
+# Copy this to your homeserver.yaml and update with your actual values
+
+# VoIP Push Notification Configuration
+voip_push:
+  # APN Configuration (for iOS)
+  apn:
+    key_id: "YOUR_APN_KEY_ID"  # Key ID from Apple Developer Portal
+    team_id: "YOUR_APN_TEAM_ID"  # Team ID from Apple Developer Portal
+    key_file: "/data/secrets/AuthKey_5JMA4TNN47.p8"  # Path to your .p8 file in Docker
+    
+  # FCM Configuration (for Android)
+  fcm:
+    credentials_file: "/data/secrets/google-services.json"  # Path to Firebase service account JSON in Docker
+    project_id: "YOUR_FIREBASE_PROJECT_ID"  # Firebase Project ID
+
+# Example pusher configuration for calls
+# This would be used when creating a pusher via the API
+pusher_example:
+  kind: "call"
+  app_id: "com.example.app"
+  app_display_name: "My App"
+  device_display_name: "iPhone"
+  pushkey: "device_token_here"
+  data:
+    apn_key_id: "YOUR_APN_KEY_ID"
+    apn_team_id: "YOUR_APN_TEAM_ID"
+    apn_key_file: "/data/secrets/AuthKey_5JMA4TNN47.p8"  # Docker path
+    fcm_credentials_file: "/data/secrets/google-services.json"  # Docker path
+    fcm_project_id: "YOUR_FIREBASE_PROJECT_ID"
+
+# Push Gateway Configuration
+# The push gateway will automatically detect call notifications
+# and use the CallPusher for rooms with "Call with " in the name
+push_gateway:
+  enabled: true
+  # Call notifications will be automatically routed to CallPusher
+  # Regular notifications will use ExpoPusher
+
+# Docker-specific configuration
+# When running in Docker, the secrets are mounted at /data/secrets
+# Make sure your secret files are in the correct location:
+# - /data/secrets/AuthKey_5JMA4TNN47.p8 (APN key file)
+# - /data/secrets/google-services.json (FCM credentials)
+
+# File path resolution order in Docker:
+# 1. /data/secrets/ (mounted secrets directory)
+# 2. /data/config/ (mounted config directory) 
+# 3. Current working directory
+# 4. Synapse directory 

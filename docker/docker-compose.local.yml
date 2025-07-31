@@ -12,6 +12,7 @@ services:
       - ../config:/data/config
       - ../config:/config
       - synapse-keys:/data/keys
+      - ../secrets:/data/secrets:ro
     ports:
       - "8008:8008"
     environment:

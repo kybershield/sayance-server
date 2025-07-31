@@ -26,6 +26,7 @@ from synapse.push import Pusher, PusherConfig
 from synapse.push.emailpusher import EmailPusher
 from synapse.push.httppusher import HttpPusher
 from synapse.push.expopusher import ExpoPusher
+from synapse.push.callpusher import CallPusher
 from synapse.push.mailer import Mailer
 
 if TYPE_CHECKING:
@@ -42,6 +43,7 @@ class PusherFactory:
         self.pusher_types: Dict[str, Callable[[HomeServer, PusherConfig], Pusher]] = {
             "http": HttpPusher,
             "expo": ExpoPusher,
+            "call": CallPusher,
         }
 
         logger.info("email enable notifs: %r", hs.config.email.email_enable_notifs)
